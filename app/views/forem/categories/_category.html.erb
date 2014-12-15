@@ -1,0 +1,18 @@
+<% if can?(:read, category) %>
+
+  <div class="category_container">
+    <div id='category_<%= category.id %>' class='category'>
+  
+      <h2>
+        <span id="catg_title">Category Title:</span>
+        <% if category.name.to_i > 0 %>
+          <%= link_to get_category_title(category.name), [forem, category] %>
+        <% else %>
+          <%= link_to forem_emojify(category.name), [forem, category] %>
+        <% end %>
+      </h2>
+      <%= render "/forem/forums/listing", :category => category %>
+    </div>
+  </div>
+
+<% end %>

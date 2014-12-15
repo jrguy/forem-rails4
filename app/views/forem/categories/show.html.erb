@@ -1,0 +1,10 @@
+<div class='category'>
+  <h2 class="forum_breadcrumb"><%= link_to t('forem.forum.forums'), forem.forums_path %> &raquo; <%#= link_to forem_emojify(@category), [forem, @category] %>
+    <% if forem_emojify(@category.id).to_i > 0 %>
+      <%= link_to get_category_title(@category.id), [forem, @category] %>
+    <% else %>
+      <%= link_to forem_emojify(@category.id), [forem, @category] %>
+    <% end %>
+  </h2>
+  <%= render @category %>
+</div>

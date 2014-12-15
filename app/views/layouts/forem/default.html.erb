@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>High Touch Courses</title>
+  <%= favicon_link_tag 'favicon.ico' %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+
+  <%= stylesheet_link_tag    "forem", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "forem", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+  <%= forem_atom_auto_discovery_link_tag %>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <div class="logo">
+        <%= link_to image_tag("htc-logo.png"), main_app.root_path %>
+      </div>
+      <%= render 'shared_menus/top_menu' %>
+    </div>
+  </header>
+
+  <div class="corridor">
+    <div class="wrap">
+
+      <div class="breadcrumbs">
+        <%= yield :breadcrumbs %>
+      </div>
+
+      <div class="left-block">
+        <div class="inner">
+          <% if content_for?(:left_menu) %>
+            <%= yield :left_menu %>
+          <% else %>
+            <% if @forum %>
+              <% @course = Course.find(@forum.name) %>
+              <h3><%= @course.title %></h3>
+              <ul>
+                <li><%= link_to 'Syllabus', @course.syllabus.url %></li>
+                <li>
+                  <%= link_to 'Lessons', main_app.category_course_lessons_path(@course.category,@course) %>
+                  <ul>
+                    <% @course.lessons.each do |lesson| %>
+                      <li><%= link_to lesson.title, main_app.category_course_lesson_pages_path(@course.category,@course,lesson) %></li>
+                    <% end %>
+                  </ul>
+                </li>
+                <li> <%= link_to 'Badges', main_app.category_course_leaderboard_path(@course.category,@course) %></li>
+                <li><%= link_to 'Forums', forem.forum_path(get_forum(@course.id)) %></li>
+                <li><%= link_to 'Resources and Links', main_app.category_course_resources_path(@course.category,@course) %></li>
+                <li><%= link_to 'Code Glossary', main_app.category_course_glossary_sections_path(@course.category,@course) %></li>
+              </ul>
+            <% else %>
+              <%= render 'shared_menus/left_menu' %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <div class="core">
+        <div class="inner">
+          <% flash.each do |k,v| %>
+            <!-- <div class='flash <%= k %>'><%= v %></div> -->
+          <% end %>
+          <%= yield %>
+        </div>
+      </div>
+      <div class="right-block">
+        <% if content_for?(:right_menu) %>
+          <%= yield :right_menu %>
+        <% else %>
+          <%= render 'shared_menus/right_menu' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <%= render 'shared_menus/footer' %>
+  </footer>
+
+</body>
+</html>
